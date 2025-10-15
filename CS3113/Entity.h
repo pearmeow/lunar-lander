@@ -65,7 +65,7 @@ public:
            Vector2 spriteSheetDimensions, std::map<Direction, std::vector<int>> animationAtlas);
     ~Entity();
 
-    void update(float deltaTime, Entity* collidableEntities, int collisionCheckCount);
+    virtual void update(float deltaTime, Entity* collidableEntities, int collisionCheckCount);
     void render();
     void normaliseMovement();
 
