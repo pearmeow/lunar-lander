@@ -49,6 +49,7 @@ void update() {
     float deltaTime = ticks - gPreviousTicks;
     gPreviousTicks = ticks;
     gRocket->update(deltaTime, nullptr, 0);
+    gRocket->setAcceleration({gRocket->getAcceleration().x, gRocket->getAcceleration().y + 10.0f * deltaTime});
 }
 
 void render() {
