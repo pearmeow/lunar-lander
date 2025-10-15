@@ -63,7 +63,7 @@ public:
     Entity(Vector2 position, Vector2 scale, const char* textureFilepath);
     Entity(Vector2 position, Vector2 scale, const char* textureFilepath, TextureType textureType,
            Vector2 spriteSheetDimensions, std::map<Direction, std::vector<int>> animationAtlas);
-    ~Entity();
+    virtual ~Entity();
 
     virtual void update(float deltaTime, Entity* collidableEntities, int collisionCheckCount);
     void render();

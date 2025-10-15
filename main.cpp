@@ -8,7 +8,9 @@
  * Academic Misconduct.
  */
 
-#include "CS3113/Entity.h"
+#include <raylib.h>
+
+#include "CS3113/Rocket.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 450, FPS = 60, SIDES = 4;
@@ -19,7 +21,8 @@ constexpr char ROCKET_FP[] = "assets/rocket.png";
 
 // Global Variables
 AppStatus gAppStatus = RUNNING;
-Entity* gRocket = nullptr;
+Rocket* gRocket = nullptr;
+bool gIsFlying = false;
 Vector2 gRocketScale = {50.0f, 50.0f};
 float gPreviousTicks = 0.0f;
 
@@ -34,13 +37,18 @@ bool isColliding(const Vector2* positionA, const Vector2* scaleA, const Vector2*
 // Function Definitions
 void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
-    gRocket = new Entity(ORIGIN, gRocketScale, ROCKET_FP);
+    gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
     gRocket->displayCollider();
     SetTargetFPS(FPS);
 }
 
 void processInput() {
     if (WindowShouldClose()) gAppStatus = TERMINATED;
+    if (IsKeyDown(KEY_SPACE)) {
+        gIsFlying = true;
+    } else {
+        gIsFlying = false;
+    }
 }
 
 void update() {
@@ -48,7 +56,9 @@ void update() {
     float ticks = (float)GetTime();
     float deltaTime = ticks - gPreviousTicks;
     gPreviousTicks = ticks;
-    gRocket->update(deltaTime, nullptr, 0);
+
+    // replace nullptr with terrain later
+    gRocket->update(deltaTime, nullptr, 0, gIsFlying);
 }
 
 void render() {

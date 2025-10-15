@@ -4,7 +4,13 @@
 #include "Entity.h"
 
 class Rocket : public Entity {
-    void update(float deltaTime, Entity* collidableEntities, int numEntities) override;
+public:
+    Rocket();
+    Rocket(Vector2 position, Vector2 scale, const char* textureFilepath);
+    Rocket(Vector2 position, Vector2 scale, const char* textureFilepath, TextureType textureType,
+           Vector2 spriteSheetDimensions, std::map<Direction, std::vector<int>> animationAtlas);
+
+    void update(float deltaTime, Entity* collidableEntities, int numEntities, bool isFlying);
 };
 
 #endif
