@@ -11,6 +11,8 @@ public:
            Vector2 spriteSheetDimensions, std::map<Direction, std::vector<int>> animationAtlas);
 
     void update(float deltaTime, Entity* collidableEntities, int numEntities, bool isFlying);
+    void moveRight();
+    void moveLeft();
 };
 
 #endif

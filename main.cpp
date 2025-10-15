@@ -13,7 +13,7 @@
 #include "CS3113/Rocket.h"
 
 // Global Constants
-constexpr int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 450, FPS = 60, SIDES = 4;
+constexpr int SCREEN_WIDTH = 1600, SCREEN_HEIGHT = 900, FPS = 60, SIDES = 4;
 
 constexpr Vector2 ORIGIN = {SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0};
 
@@ -48,6 +48,12 @@ void processInput() {
         gIsFlying = true;
     } else {
         gIsFlying = false;
+    }
+    if (IsKeyDown(KEY_A)) {
+        gRocket->moveLeft();
+    }
+    if (IsKeyDown(KEY_D)) {
+        gRocket->moveRight();
     }
 }
 
