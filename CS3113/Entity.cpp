@@ -216,7 +216,6 @@ void Entity::update(float deltaTime, Entity* collidableEntities, int collisionCh
     checkCollisionY(collidableEntities, collisionCheckCount);
 
     mPosition.x += mVelocity.x * deltaTime;
-    printf("xAcc: %f\n", mAcceleration.x * deltaTime);
     checkCollisionX(collidableEntities, collisionCheckCount);
 
     if (mTextureType == ATLAS && GetLength(mMovement) != 0 && mIsCollidingBottom) animate(deltaTime);

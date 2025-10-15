@@ -20,8 +20,11 @@ void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities
         newAcc.x = 40.0f * std::sin(3.14f * getAngle() / 180.0f);
         newAcc.y = -40.0f * std::cos(3.14f * getAngle() / 180.0f) + 10.0f;
     } else {
+        // gravity
         newAcc.y = 10.0f;
-        newAcc.x = 0.0f;
+
+        // slowly drift to a stop
+        newAcc.x = -1.0f * getVelocity().x / 3.0;
     }
     setAcceleration(newAcc);
     Entity::update(deltaTime, collidableEntities, numEntities);
