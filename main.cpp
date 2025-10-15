@@ -22,7 +22,6 @@ constexpr char ROCKET_FP[] = "assets/rocket.png";
 // Global Variables
 AppStatus gAppStatus = RUNNING;
 Rocket* gRocket = nullptr;
-bool gIsFlying = false;
 Vector2 gRocketScale = {50.0f, 50.0f};
 float gPreviousTicks = 0.0f;
 
@@ -45,9 +44,9 @@ void initialise() {
 void processInput() {
     if (WindowShouldClose()) gAppStatus = TERMINATED;
     if (IsKeyDown(KEY_SPACE)) {
-        gIsFlying = true;
+        gRocket->setFlying(true);
     } else {
-        gIsFlying = false;
+        gRocket->setFlying(false);
     }
     if (IsKeyDown(KEY_A)) {
         gRocket->moveLeft();
@@ -64,7 +63,7 @@ void update() {
     gPreviousTicks = ticks;
 
     // replace nullptr with terrain later
-    gRocket->update(deltaTime, nullptr, 0, gIsFlying);
+    gRocket->update(deltaTime, nullptr, 0);
 }
 
 void render() {

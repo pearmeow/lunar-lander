@@ -14,9 +14,9 @@ Rocket::Rocket(Vector2 position, Vector2 scale, const char* textureFilepath, Tex
     : Entity(position, scale, textureFilepath, textureType, spriteSheetDimensions, animationAtlas) {
 }
 
-void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities, bool isFlying) {
+void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities) {
     Vector2 newAcc = getAcceleration();
-    if (isFlying) {
+    if (mFlying) {
         newAcc.x = 40.0f * std::sin(3.14f * getAngle() / 180.0f);
         newAcc.y = -40.0f * std::cos(3.14f * getAngle() / 180.0f) + 10.0f;
     } else {
@@ -44,4 +44,12 @@ void Rocket::moveRight() {
     } else {
         setAngle(getAngle() + 2.0f);
     }
+}
+
+void Rocket::setFlying(bool isFlying) {
+    mFlying = isFlying;
+}
+
+bool Rocket::getFlying() {
+    return mFlying;
 }
