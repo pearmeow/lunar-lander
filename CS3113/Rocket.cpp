@@ -34,7 +34,7 @@ void Rocket::moveLeft() {
     if (getAngle() <= 0.0f) {
         setAngle(360.0f);
     } else {
-        setAngle(getAngle() - 2.0f);
+        setAngle(getAngle() - 1.3f);
     }
 }
 
@@ -42,7 +42,7 @@ void Rocket::moveRight() {
     if (getAngle() >= 360.0f) {
         setAngle(0.0f);
     } else {
-        setAngle(getAngle() + 2.0f);
+        setAngle(getAngle() + 1.3f);
     }
 }
 
