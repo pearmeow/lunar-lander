@@ -16,9 +16,10 @@ Rocket::Rocket(Vector2 position, Vector2 scale, const char* textureFilepath, Tex
 
 void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities) {
     Vector2 newAcc = getAcceleration();
-    if (mFlying) {
+    if (mFlying && mFuel > 0.0f) {
         newAcc.x = 40.0f * std::sin(3.14f * getAngle() / 180.0f);
         newAcc.y = -40.0f * std::cos(3.14f * getAngle() / 180.0f) + 10.0f;
+        mFuel -= 250.0f * deltaTime;
     } else {
         // gravity
         newAcc.y = 10.0f;
@@ -52,4 +53,12 @@ void Rocket::setFlying(bool isFlying) {
 
 bool Rocket::getFlying() {
     return mFlying;
+}
+
+void Rocket::setFuel(float newFuel) {
+    mFuel = newFuel;
+}
+
+float Rocket::getFuel() {
+    return mFuel;
 }

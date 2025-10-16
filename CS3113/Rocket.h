@@ -22,7 +22,7 @@ public:
 
     // implement these
     void setFuel(float newFuel);
-    bool getFuel();
+    float getFuel();
 };
 
 #endif
