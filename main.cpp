@@ -10,6 +10,7 @@
 
 #include <raylib.h>
 
+// for debugging
 #include <charconv>
 #include <cstring>
 
@@ -64,6 +65,7 @@ void initialise() {
     gBlocks[5].setColliderDimensions(gBlockScale);
     gBlocks[5].setType(WIN);
     gRocket->displayCollider();
+    gBlocks[0].moveUp();
     SetTargetFPS(FPS);
 }
 
@@ -86,7 +88,6 @@ void processInput() {
     if (IsKeyDown(KEY_D)) {
         gRocket->moveRight();
     }
-    gBlocks[0].moveUp();
 }
 
 void update() {
@@ -99,7 +100,9 @@ void update() {
         return;
     }
 
-    // replace nullptr with terrain later
+    for (size_t i = 0; i < 6; ++i) {
+        gBlocks[i].update(deltaTime, nullptr, 0);
+    }
     gRocket->update(deltaTime, gBlocks, 6);
     // if the rocket reaches a lose condition
     if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
@@ -118,10 +121,6 @@ void update() {
     } else {
         // PERF: probably inefficient
         strncpy(gFuel, "Fuel: 0.0", 20);
-    }
-
-    for (size_t i = 0; i < 6; ++i) {
-        gBlocks[i].update(deltaTime, nullptr, 0);
     }
 }
 

@@ -78,6 +78,7 @@ void Entity::checkCollisionY(Entity* collidableEntities, int collisionCheckCount
         Entity* collidableEntity = &collidableEntities[i];
 
         if (isColliding(collidableEntity)) {
+            std::cout << i << " colliding with this one" << std::endl;
             // STEP 2: Calculate the distance between its centre and our centre
             //         and use that to calculate the amount of overlap between
             //         both bodies.

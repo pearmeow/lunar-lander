@@ -31,14 +31,20 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
         newAcc.x = -1.0f * getVelocity().x / 3.0;
     }
     setAcceleration(newAcc);
-    Entity::update(deltaTime, collidableBlocks, numEntities);
     for (size_t i = 0; i < numEntities; ++i) {
         if (Entity::isColliding(collidableBlocks + i)) {
             if (collidableBlocks[i].getType() == LOSE) {
                 mCrashed = true;
+            } else if (((getAngle() <= 5.0f && getAngle() >= 0.0f) ||
+                        (getAngle() >= 355.0f && getAngle() <= 360.0f)) &&
+                       getVelocity().y < 10.0f && getVelocity().x < 10.0f) {
+                mLanded = true;
+            } else {
+                mCrashed = true;
             }
         }
     }
+    Entity::update(deltaTime, collidableBlocks, numEntities);
 }
 
 void Rocket::moveLeft() {
