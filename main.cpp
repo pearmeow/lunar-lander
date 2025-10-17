@@ -13,7 +13,6 @@
 // for debugging
 #include <charconv>
 #include <cstring>
-#include <iostream>
 
 #include "CS3113/Block.h"
 #include "CS3113/Rocket.h"
@@ -26,6 +25,7 @@ constexpr Vector2 ORIGIN = {SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0};
 constexpr char ROCKET_FP[] = "./assets/rocket.png";
 constexpr char BLOCK_FP[] = "./assets/block.png";
 constexpr char GREEN_BLOCK_FP[] = "./assets/greenBlock.png";
+constexpr int NUM_BLOCKS = 6;
 
 // Global Variables
 AppStatus gAppStatus = RUNNING;
@@ -51,19 +51,19 @@ void shutdown();
 void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
     gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
-    gBlocks = new Block[6];
-    for (size_t i = 0; i < 5; ++i) {
+    gBlocks = new Block[NUM_BLOCKS];
+    for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].setTexture(BLOCK_FP);
-        gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
+        gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y / 2.0f});
         gBlocks[i].setScale(gBlockScale);
         gBlocks[i].setColliderDimensions(gBlockScale);
     }
     gBlocks[0].moveUp();
-    gBlocks[5].setTexture(GREEN_BLOCK_FP);
-    gBlocks[5].setPosition({ORIGIN.x - 4 * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
-    gBlocks[5].setScale(gBlockScale);
-    gBlocks[5].setColliderDimensions(gBlockScale);
-    gBlocks[5].setType(WIN);
+    gBlocks[NUM_BLOCKS - 1].setTexture(GREEN_BLOCK_FP);
+    gBlocks[NUM_BLOCKS - 1].setPosition({ORIGIN.x - 4 * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
+    gBlocks[NUM_BLOCKS - 1].setScale(gBlockScale);
+    gBlocks[NUM_BLOCKS - 1].setColliderDimensions(gBlockScale);
+    gBlocks[NUM_BLOCKS - 1].setType(WIN);
     SetTargetFPS(FPS);
 }
 
@@ -98,7 +98,7 @@ void update() {
         return;
     }
 
-    gRocket->update(deltaTime, gBlocks, 6);
+    gRocket->update(deltaTime, gBlocks, NUM_BLOCKS);
     // if the rocket reaches a lose condition
     if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
@@ -111,7 +111,7 @@ void update() {
         strncpy(gGameOverMessage, "Mission Accomplished", 20);
     }
 
-    for (size_t i = 0; i < 6; ++i) {
+    for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].update(deltaTime, nullptr, 0);
     }
     // convert float to char*
@@ -126,7 +126,7 @@ void update() {
 void render() {
     BeginDrawing();
     gRocket->render();
-    for (size_t i = 0; i < 6; ++i) {
+    for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].render();
     }
     DrawText(gGameOverMessage, ORIGIN.x, 0.0f, 60, WHITE);
