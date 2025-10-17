@@ -60,7 +60,7 @@ void initialise() {
     }
     gBlocks[0].moveUp();
     gBlocks[NUM_BLOCKS - 1].setTexture(GREEN_BLOCK_FP);
-    gBlocks[NUM_BLOCKS - 1].setPosition({ORIGIN.x - 4 * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
+    gBlocks[NUM_BLOCKS - 1].setPosition({ORIGIN.x - 1 * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y / 2.0f});
     gBlocks[NUM_BLOCKS - 1].setScale(gBlockScale);
     gBlocks[NUM_BLOCKS - 1].setColliderDimensions(gBlockScale);
     gBlocks[NUM_BLOCKS - 1].setType(WIN);
