@@ -19,3 +19,11 @@ void Block::moveUp() {
 void Block::moveDown() {
     setAcceleration({0.0f, 10.0f});
 }
+
+BlockType Block::getType() {
+    return mType;
+}
+
+void Block::setType(BlockType newType) {
+    mType = newType;
+}

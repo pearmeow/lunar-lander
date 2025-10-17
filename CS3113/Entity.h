@@ -41,7 +41,6 @@ private:
 
     EntityStatus mEntityStatus = ACTIVE;
 
-    bool isColliding(Entity* other) const;
     void checkCollisionY(Entity* collidableEntities, int collisionCheckCount);
     void checkCollisionX(Entity* collidableEntities, int collisionCheckCount);
     void resetColliderFlags() {
@@ -96,6 +95,7 @@ public:
     int getFrameSpeed() const;
     float getJumpingPower() const;
     bool isJumping() const;
+    bool isColliding(Entity* other) const;
     int getSpeed() const;
     float getAngle() const;
 

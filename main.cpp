@@ -21,8 +21,9 @@ constexpr int SCREEN_WIDTH = 1600, SCREEN_HEIGHT = 900, FPS = 60, SIDES = 4;
 
 constexpr Vector2 ORIGIN = {SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0};
 
-constexpr char ROCKET_FP[] = "assets/rocket.png";
-constexpr char BLOCK_FP[] = "assets/block.png";
+constexpr char ROCKET_FP[] = "./assets/rocket.png";
+constexpr char BLOCK_FP[] = "./assets/block.png";
+constexpr char GREEN_BLOCK_FP[] = "./assets/greenBlock.png";
 
 // Global Variables
 AppStatus gAppStatus = RUNNING;
@@ -34,7 +35,7 @@ Block* gBlocks = nullptr;
 
 // allocate enough space to put win/lose messages in later
 bool gIsGameOver = false;
-char gGameOverMessage[10] = "";
+char gGameOverMessage[20] = "";
 char gFuel[20] = "Fuel: ";
 
 // Function Declarations
@@ -49,7 +50,7 @@ bool isColliding(const Vector2* positionA, const Vector2* scaleA, const Vector2*
 void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
     gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
-    gBlocks = new Block[5];
+    gBlocks = new Block[6];
     for (size_t i = 0; i < 5; ++i) {
         gBlocks[i].setTexture(BLOCK_FP);
         gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
@@ -57,6 +58,11 @@ void initialise() {
         gBlocks[i].setColliderDimensions(gBlockScale);
     }
     gBlocks[0].moveUp();
+    gBlocks[5].setTexture(GREEN_BLOCK_FP);
+    gBlocks[5].setPosition({ORIGIN.x - 4 * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
+    gBlocks[5].setScale(gBlockScale);
+    gBlocks[5].setColliderDimensions(gBlockScale);
+    gBlocks[5].setType(WIN);
     gRocket->displayCollider();
     SetTargetFPS(FPS);
 }
@@ -94,27 +100,27 @@ void update() {
     }
 
     // replace nullptr with terrain later
-    gRocket->update(deltaTime, gBlocks, 5);
+    gRocket->update(deltaTime, gBlocks, 6);
     // if the rocket reaches a lose condition
-    if (gRocket->isCrashed(SCREEN_WIDTH, SCREEN_HEIGHT)) {
+    if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
         gIsGameOver = true;
-        strncpy(gGameOverMessage, "Mission Failed", 9);
+        strncpy(gGameOverMessage, "Mission Failed", 20);
     } else if (gRocket->isLanded()) {
         // if the rocket reaches a win condition
         // some more safe string copying
         gIsGameOver = true;
-        strncpy(gGameOverMessage, "Mission Accomplished", 8);
+        strncpy(gGameOverMessage, "Mission Accomplished", 20);
     }
     // convert float to char*
     if (gRocket->getFuel() > 0.0f) {
         std::to_chars(gFuel + 6, gFuel + 20, gRocket->getFuel());
     } else {
-        // probably inefficient
+        // PERF: probably inefficient
         strncpy(gFuel, "Fuel: 0.0", 20);
     }
 
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < 6; ++i) {
         gBlocks[i].update(deltaTime, nullptr, 0);
     }
 }
@@ -122,7 +128,7 @@ void update() {
 void render() {
     BeginDrawing();
     gRocket->render();
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < 6; ++i) {
         gBlocks[i].render();
     }
     DrawText(gGameOverMessage, ORIGIN.x, 0.0f, 60, WHITE);

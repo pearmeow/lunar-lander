@@ -14,7 +14,7 @@ Rocket::Rocket(Vector2 position, Vector2 scale, const char* textureFilepath, Tex
     : Entity(position, scale, textureFilepath, textureType, spriteSheetDimensions, animationAtlas) {
 }
 
-void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities) {
+void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
     Vector2 newAcc = getAcceleration();
     if (mFlying && mFuel > 0.0f) {
         newAcc.x = 40.0f * std::sin(3.14f * getAngle() / 180.0f);
@@ -31,7 +31,14 @@ void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities
         newAcc.x = -1.0f * getVelocity().x / 3.0;
     }
     setAcceleration(newAcc);
-    Entity::update(deltaTime, collidableEntities, numEntities);
+    Entity::update(deltaTime, collidableBlocks, numEntities);
+    for (size_t i = 0; i < numEntities; ++i) {
+        if (Entity::isColliding(collidableBlocks + i)) {
+            if (collidableBlocks[i].getType() == LOSE) {
+                mCrashed = true;
+            }
+        }
+    }
 }
 
 void Rocket::moveLeft() {
@@ -66,7 +73,11 @@ float Rocket::getFuel() {
     return mFuel;
 }
 
-bool Rocket::isCrashed(float screenWidth, float screenHeight) {
+bool Rocket::isCrashed() {
+    return mCrashed;
+}
+
+bool Rocket::isOutOfBounds(float screenWidth, float screenHeight) {
     if (getPosition().x + getScale().x < 0) {
         return true;
     }
