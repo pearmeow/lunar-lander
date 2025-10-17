@@ -13,6 +13,7 @@
 // for debugging
 #include <charconv>
 #include <cstring>
+#include <iostream>
 
 #include "CS3113/Block.h"
 #include "CS3113/Rocket.h"
@@ -45,7 +46,6 @@ void processInput();
 void update();
 void render();
 void shutdown();
-bool isColliding(const Vector2* positionA, const Vector2* scaleA, const Vector2* positionB, const Vector2* scaleB);
 
 // Function Definitions
 void initialise() {
@@ -100,9 +100,6 @@ void update() {
         return;
     }
 
-    for (size_t i = 0; i < 6; ++i) {
-        gBlocks[i].update(deltaTime, nullptr, 0);
-    }
     gRocket->update(deltaTime, gBlocks, 6);
     // if the rocket reaches a lose condition
     if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
@@ -114,6 +111,10 @@ void update() {
         // some more safe string copying
         gIsGameOver = true;
         strncpy(gGameOverMessage, "Mission Accomplished", 20);
+    }
+
+    for (size_t i = 0; i < 6; ++i) {
+        gBlocks[i].update(deltaTime, nullptr, 0);
     }
     // convert float to char*
     if (gRocket->getFuel() > 0.0f) {

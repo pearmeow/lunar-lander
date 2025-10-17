@@ -78,7 +78,6 @@ void Entity::checkCollisionY(Entity* collidableEntities, int collisionCheckCount
         Entity* collidableEntity = &collidableEntities[i];
 
         if (isColliding(collidableEntity)) {
-            std::cout << i << " colliding with this one" << std::endl;
             // STEP 2: Calculate the distance between its centre and our centre
             //         and use that to calculate the amount of overlap between
             //         both bodies.
@@ -154,7 +153,6 @@ bool Entity::isColliding(Entity* other) const {
                       ((mColliderDimensions.x + other->getColliderDimensions().x) / 2.0f);
     float yDistance = fabs(mPosition.y - other->getPosition().y) -
                       ((mColliderDimensions.y + other->getColliderDimensions().y) / 2.0f);
-
     if (xDistance < 0.0f && yDistance < 0.0f) return true;
 
     return false;
@@ -205,13 +203,13 @@ void Entity::update(float deltaTime, Entity* collidableEntities, int collisionCh
     mVelocity.y += mAcceleration.y * deltaTime;
 
     // ––––– JUMPING ––––– //
-    if (mIsJumping) {
-        // STEP 1: Immediately return the flag to its original false state
-        mIsJumping = false;
-
-        // STEP 2: The player now acquires an upward velocity
-        mVelocity.y -= mJumpingPower;
-    }
+    // if (mIsJumping) {
+    //     // STEP 1: Immediately return the flag to its original false state
+    //     mIsJumping = false;
+    //
+    //     // STEP 2: The player now acquires an upward velocity
+    //     mVelocity.y -= mJumpingPower;
+    // }
 
     mPosition.y += mVelocity.y * deltaTime;
     checkCollisionY(collidableEntities, collisionCheckCount);
