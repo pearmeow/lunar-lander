@@ -64,8 +64,6 @@ void initialise() {
     gBlocks[5].setScale(gBlockScale);
     gBlocks[5].setColliderDimensions(gBlockScale);
     gBlocks[5].setType(WIN);
-    gRocket->displayCollider();
-    gBlocks[0].moveUp();
     SetTargetFPS(FPS);
 }
 
