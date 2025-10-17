@@ -13,6 +13,7 @@
 #include <charconv>
 #include <cstring>
 
+#include "CS3113/Block.h"
 #include "CS3113/Rocket.h"
 
 // Global Constants
@@ -29,7 +30,7 @@ Rocket* gRocket = nullptr;
 Vector2 gRocketScale = {50.0f, 50.0f};
 float gPreviousTicks = 0.0f;
 Vector2 gBlockScale = {100.0f, 100.0f};
-Entity* gBlocks = nullptr;
+Block* gBlocks = nullptr;
 
 // allocate enough space to put win/lose messages in later
 bool gIsGameOver = false;
@@ -48,13 +49,14 @@ bool isColliding(const Vector2* positionA, const Vector2* scaleA, const Vector2*
 void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
     gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
-    gBlocks = new Entity[5];
+    gBlocks = new Block[5];
     for (size_t i = 0; i < 5; ++i) {
         gBlocks[i].setTexture(BLOCK_FP);
         gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
         gBlocks[i].setScale(gBlockScale);
         gBlocks[i].setColliderDimensions(gBlockScale);
     }
+    gBlocks[0].moveUp();
     gRocket->displayCollider();
     SetTargetFPS(FPS);
 }
@@ -78,6 +80,7 @@ void processInput() {
     if (IsKeyDown(KEY_D)) {
         gRocket->moveRight();
     }
+    gBlocks[0].moveUp();
 }
 
 void update() {
@@ -109,6 +112,10 @@ void update() {
     } else {
         // probably inefficient
         strncpy(gFuel, "Fuel: 0.0", 20);
+    }
+
+    for (size_t i = 0; i < 5; ++i) {
+        gBlocks[i].update(deltaTime, nullptr, 0);
     }
 }
 
