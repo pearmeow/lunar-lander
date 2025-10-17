@@ -96,12 +96,12 @@ void update() {
     if (gRocket->isCrashed(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
         gIsGameOver = true;
-        strncpy(gGameOverMessage, "You lose!", 9);
+        strncpy(gGameOverMessage, "Mission Failed", 9);
     } else if (gRocket->isLanded()) {
         // if the rocket reaches a win condition
         // some more safe string copying
         gIsGameOver = true;
-        strncpy(gGameOverMessage, "You win!", 8);
+        strncpy(gGameOverMessage, "Mission Accomplished", 8);
     }
     // convert float to char*
     if (gRocket->getFuel() > 0.0f) {
