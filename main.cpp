@@ -50,6 +50,7 @@ void initialise() {
         gBlocks[i].setTexture(BLOCK_FP);
         gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y});
         gBlocks[i].setScale(gBlockScale);
+        gBlocks[i].setColliderDimensions(gBlockScale);
     }
     gRocket->displayCollider();
     SetTargetFPS(FPS);
