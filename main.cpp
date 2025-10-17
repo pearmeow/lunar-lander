@@ -32,8 +32,9 @@ Vector2 gBlockScale = {100.0f, 100.0f};
 Entity* gBlocks = nullptr;
 
 // allocate enough space to put win/lose messages in later
-char gGameOver[10] = "";
-char gFuel[10] = "";
+bool gIsGameOver = false;
+char gGameOverMessage[10] = "";
+char gFuel[20] = "Fuel: ";
 
 // Function Declarations
 void initialise();
@@ -60,6 +61,12 @@ void initialise() {
 
 void processInput() {
     if (WindowShouldClose()) gAppStatus = TERMINATED;
+
+    // skip processing if game is over
+    if (gIsGameOver) {
+        return;
+    }
+
     if (IsKeyDown(KEY_SPACE)) {
         gRocket->setFlying(true);
     } else {
@@ -78,18 +85,31 @@ void update() {
     float deltaTime = ticks - gPreviousTicks;
     gPreviousTicks = ticks;
 
+    // skip updating if game is over
+    if (gIsGameOver) {
+        return;
+    }
+
     // replace nullptr with terrain later
     gRocket->update(deltaTime, gBlocks, 5);
     // if the rocket reaches a lose condition
     if (gRocket->isCrashed(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
-        strncpy(gGameOver, "You lose!", 9);
+        gIsGameOver = true;
+        strncpy(gGameOverMessage, "You lose!", 9);
     } else if (gRocket->isLanded()) {
         // if the rocket reaches a win condition
         // some more safe string copying
-        strncpy(gGameOver, "You win!", 8);
+        gIsGameOver = true;
+        strncpy(gGameOverMessage, "You win!", 8);
     }
-    std::to_chars(gFuel, gFuel + 9, gRocket->getFuel());
+    // convert float to char*
+    if (gRocket->getFuel() > 0.0f) {
+        std::to_chars(gFuel + 6, gFuel + 20, gRocket->getFuel());
+    } else {
+        // probably inefficient
+        strncpy(gFuel, "Fuel: 0.0", 20);
+    }
 }
 
 void render() {
@@ -98,8 +118,8 @@ void render() {
     for (size_t i = 0; i < 5; ++i) {
         gBlocks[i].render();
     }
-    DrawText(gGameOver, ORIGIN.x, 0.0f, 60, WHITE);
-    DrawText(gFuel, 0.0f, 0.0f, 30, WHITE);
+    DrawText(gGameOverMessage, ORIGIN.x, 0.0f, 60, WHITE);
+    DrawText(gFuel, 10.0f, 10.0f, 30, WHITE);
     ClearBackground(BLACK);
     EndDrawing();
 }

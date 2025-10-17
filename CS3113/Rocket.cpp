@@ -20,6 +20,9 @@ void Rocket::update(float deltaTime, Entity* collidableEntities, int numEntities
         newAcc.x = 40.0f * std::sin(3.14f * getAngle() / 180.0f);
         newAcc.y = -40.0f * std::cos(3.14f * getAngle() / 180.0f) + 10.0f;
         mFuel -= 250.0f * deltaTime;
+        if (mFuel <= 0.0f) {
+            mFuel = 0.0f;
+        }
     } else {
         // gravity
         newAcc.y = 10.0f;
