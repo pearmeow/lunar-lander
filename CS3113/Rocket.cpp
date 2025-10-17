@@ -62,3 +62,23 @@ void Rocket::setFuel(float newFuel) {
 float Rocket::getFuel() {
     return mFuel;
 }
+
+bool Rocket::isCrashed(float screenWidth, float screenHeight) {
+    if (getPosition().x + getScale().x < 0) {
+        return true;
+    }
+    if (getPosition().y + getScale().y < 0) {
+        return true;
+    }
+    if (getPosition().y - getScale().y > screenHeight) {
+        return true;
+    }
+    if (getPosition().x - getScale().x > screenWidth) {
+        return true;
+    }
+    return false;
+}
+
+bool Rocket::isLanded() {
+    return mLanded;
+}

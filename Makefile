@@ -7,7 +7,7 @@ UNAME_S := $(shell uname -s)
 
 # Default values
 CXX = g++
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++17
 
 ifeq ($(UNAME_S), Darwin)
     # macOS configuration

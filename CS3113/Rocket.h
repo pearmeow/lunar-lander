@@ -6,6 +6,7 @@
 class Rocket : public Entity {
 private:
     bool mFlying = false;
+    bool mLanded = false;
     float mFuel = 5000.0f;
 
 public:
@@ -19,6 +20,8 @@ public:
     void moveLeft();
     void setFlying(bool isFlying);
     bool getFlying();
+    bool isCrashed(float screenWidth, float screenHeight);
+    bool isLanded();
 
     // implement these
     void setFuel(float newFuel);

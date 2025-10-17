@@ -10,6 +10,7 @@
 
 #include <raylib.h>
 
+#include <charconv>
 #include <cstring>
 
 #include "CS3113/Rocket.h"
@@ -32,6 +33,7 @@ Entity* gBlocks = nullptr;
 
 // allocate enough space to put win/lose messages in later
 char gGameOver[10] = "";
+char gFuel[10] = "";
 
 // Function Declarations
 void initialise();
@@ -79,14 +81,15 @@ void update() {
     // replace nullptr with terrain later
     gRocket->update(deltaTime, gBlocks, 5);
     // if the rocket reaches a lose condition
-    if (gRocket->getFlying()) {
+    if (gRocket->isCrashed(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
         strncpy(gGameOver, "You lose!", 9);
-    } else {
+    } else if (gRocket->isLanded()) {
         // if the rocket reaches a win condition
         // some more safe string copying
         strncpy(gGameOver, "You win!", 8);
     }
+    std::to_chars(gFuel, gFuel + 9, gRocket->getFuel());
 }
 
 void render() {
@@ -95,7 +98,8 @@ void render() {
     for (size_t i = 0; i < 5; ++i) {
         gBlocks[i].render();
     }
-    // DrawText(gGameOver, ORIGIN.x, 0.0f, 30, WHITE);
+    DrawText(gGameOver, ORIGIN.x, 0.0f, 60, WHITE);
+    DrawText(gFuel, 0.0f, 0.0f, 30, WHITE);
     ClearBackground(BLACK);
     EndDrawing();
 }
