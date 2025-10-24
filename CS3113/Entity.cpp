@@ -320,7 +320,7 @@ Vector2 Entity::getScale() const {
     return mScale;
 }
 Vector2 Entity::getColliderDimensions() const {
-    return mScale;
+    return mColliderDimensions;
 }
 Vector2 Entity::getSpriteSheetDimensions() const {
     return mSpriteSheetDimensions;
