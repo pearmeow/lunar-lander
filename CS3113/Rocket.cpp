@@ -45,7 +45,7 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
         }
     }
     printf("current pos: %f, %f\n", getPosition().x, getPosition().y);
-    Entity::update(deltaTime, collidableBlocks, 0);
+    Entity::update(deltaTime, collidableBlocks, numEntities);
 }
 
 void Rocket::turnLeft() {
