@@ -44,10 +44,11 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
             }
         }
     }
+    printf("current pos: %f, %f\n", getPosition().x, getPosition().y);
     Entity::update(deltaTime, collidableBlocks, numEntities);
 }
 
-void Rocket::moveLeft() {
+void Rocket::turnLeft() {
     if (getAngle() <= 0.0f) {
         setAngle(360.0f);
     } else {
@@ -55,7 +56,7 @@ void Rocket::moveLeft() {
     }
 }
 
-void Rocket::moveRight() {
+void Rocket::turnRight() {
     if (getAngle() >= 360.0f) {
         setAngle(0.0f);
     } else {

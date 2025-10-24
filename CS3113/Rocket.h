@@ -18,15 +18,13 @@ public:
            Vector2 spriteSheetDimensions, std::map<Direction, std::vector<int>> animationAtlas);
 
     void update(float deltaTime, Block* collidableEntities, int numEntities);
-    void moveRight();
-    void moveLeft();
+    void turnRight();
+    void turnLeft();
     void setFlying(bool isFlying);
     bool getFlying();
     bool isCrashed();
     bool isOutOfBounds(float screenWidth, float screenHeight);
     bool isLanded();
-
-    // implement these
     void setFuel(float newFuel);
     float getFuel();
 };

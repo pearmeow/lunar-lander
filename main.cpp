@@ -52,7 +52,7 @@ void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
     gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
     gBlocks = new Block[NUM_BLOCKS];
-    for (size_t i = 0; i < NUM_BLOCKS; ++i) {
+    for (size_t i = 0; i < NUM_BLOCKS - 1; ++i) {
         gBlocks[i].setTexture(BLOCK_FP);
         gBlocks[i].setPosition({ORIGIN.x + i * gBlockScale.x, SCREEN_HEIGHT - gBlockScale.y / 2.0f});
         gBlocks[i].setScale(gBlockScale);
@@ -81,10 +81,10 @@ void processInput() {
         gRocket->setFlying(false);
     }
     if (IsKeyDown(KEY_A)) {
-        gRocket->moveLeft();
+        gRocket->turnLeft();
     }
     if (IsKeyDown(KEY_D)) {
-        gRocket->moveRight();
+        gRocket->turnRight();
     }
 }
 
@@ -113,6 +113,10 @@ void update() {
 
     for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].update(deltaTime, nullptr, 0);
+        printf("Block %lu pos: %f, %f\n", i, gBlocks[i].getPosition().x, gBlocks[i].getPosition().x);
+        printf("Block %lu scale: %f, %f\n", i, gBlocks[i].getScale().x, gBlocks[i].getScale().x);
+        printf("Block %lu collider: %f, %f\n", i, gBlocks[i].getColliderDimensions().x,
+               gBlocks[i].getColliderDimensions().x);
     }
     // convert float to char*
     if (gRocket->getFuel() > 0.0f) {
