@@ -75,7 +75,7 @@ Entity::~Entity() {
 void Entity::checkCollisionY(Entity* collidableEntities, int collisionCheckCount) {
     for (int i = 0; i < collisionCheckCount; i++) {
         // STEP 1: For every entity that our player can collide with...
-        Entity* collidableEntity = &collidableEntities[i];
+        Entity* collidableEntity = collidableEntities + i;
 
         if (isColliding(collidableEntity)) {
             // STEP 2: Calculate the distance between its centre and our centre
@@ -102,9 +102,10 @@ void Entity::checkCollisionY(Entity* collidableEntities, int collisionCheckCount
 
 void Entity::checkCollisionX(Entity* collidableEntities, int collisionCheckCount) {
     for (int i = 0; i < collisionCheckCount; i++) {
-        Entity* collidableEntity = &collidableEntities[i];
+        Entity* collidableEntity = collidableEntities + i;
 
         if (isColliding(collidableEntity)) {
+            printf("In checkCollisionX on entity num %i\n", i);
             // When standing on a platform, we're always slightly overlapping
             // it vertically due to gravity, which causes false horizontal
             // collision detections. So the solution I dound is only resolve X

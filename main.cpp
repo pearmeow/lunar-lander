@@ -113,10 +113,10 @@ void update() {
 
     for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].update(deltaTime, nullptr, 0);
-        printf("Block %lu pos: %f, %f\n", i, gBlocks[i].getPosition().x, gBlocks[i].getPosition().x);
-        printf("Block %lu scale: %f, %f\n", i, gBlocks[i].getScale().x, gBlocks[i].getScale().x);
-        printf("Block %lu collider: %f, %f\n", i, gBlocks[i].getColliderDimensions().x,
-               gBlocks[i].getColliderDimensions().x);
+        // printf("Block %lu pos: %f, %f\n", i, gBlocks[i].getPosition().x, gBlocks[i].getPosition().x);
+        // printf("Block %lu scale: %f, %f\n", i, gBlocks[i].getScale().x, gBlocks[i].getScale().x);
+        // printf("Block %lu collider: %f, %f\n", i, gBlocks[i].getColliderDimensions().x,
+        //        gBlocks[i].getColliderDimensions().x);
     }
     // convert float to char*
     if (gRocket->getFuel() > 0.0f) {
