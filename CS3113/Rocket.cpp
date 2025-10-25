@@ -23,7 +23,13 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
         if (mFuel <= 0.0f) {
             mFuel = 0.0f;
         }
+        if (mTrail) {
+            mTrail->activate();
+        }
     } else {
+        if (mTrail) {
+            mTrail->deactivate();
+        }
         // gravity
         newAcc.y = 10.0f;
 
@@ -48,6 +54,14 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
     // fixes weird collision bug and also we don't need to
     // check collision twice
     Entity::update(deltaTime, nullptr, 0);
+    // do some math to position the trail so that it's not touching the rocket
+    if (mTrail) {
+        Vector2 trailPos = getPosition();
+        trailPos.x +=
+            (getScale().x / 2.0 + mTrail->getScale().x / 2.0) * -1.0 * std::cos(3.14f * getAngle() / 180.0f);
+        trailPos.y += (getScale().y / 2.0 + mTrail->getScale().y / 2.0) * std::sin(3.14f * getAngle() / 180.0f);
+        mTrail->setPosition(trailPos);
+    }
 }
 
 void Rocket::turnLeft() {
@@ -55,6 +69,9 @@ void Rocket::turnLeft() {
         setAngle(360.0f);
     } else {
         setAngle(getAngle() - 1.3f);
+        if (mTrail) {
+            mTrail->setAngle(getAngle());
+        }
     }
 }
 
@@ -63,6 +80,9 @@ void Rocket::turnRight() {
         setAngle(0.0f);
     } else {
         setAngle(getAngle() + 1.3f);
+        if (mTrail) {
+            mTrail->setAngle(getAngle());
+        }
     }
 }
 
@@ -104,4 +124,12 @@ bool Rocket::isOutOfBounds(float screenWidth, float screenHeight) {
 
 bool Rocket::isLanded() {
     return mLanded;
+}
+
+void Rocket::setTrail(Entity* newTrail) {
+    mTrail = newTrail;
+}
+
+Entity* Rocket::getTrail() {
+    return mTrail;
 }

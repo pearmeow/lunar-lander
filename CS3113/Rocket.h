@@ -10,6 +10,7 @@ private:
     bool mCrashed = false;
     bool mLanded = false;
     float mFuel = 5000.0f;
+    Entity* mTrail = nullptr;
 
 public:
     Rocket();
@@ -27,6 +28,9 @@ public:
     bool isLanded();
     void setFuel(float newFuel);
     float getFuel();
+
+    Entity* getTrail();
+    void setTrail(Entity* newTrail);
 };
 
 #endif
