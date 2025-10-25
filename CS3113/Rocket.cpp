@@ -57,9 +57,8 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
     // do some math to position the trail so that it's not touching the rocket
     if (mTrail) {
         Vector2 trailPos = getPosition();
-        trailPos.x +=
-            (getScale().x / 2.0 + mTrail->getScale().x / 2.0) * -1.0 * std::cos(3.14f * getAngle() / 180.0f);
-        trailPos.y += (getScale().y / 2.0 + mTrail->getScale().y / 2.0) * std::sin(3.14f * getAngle() / 180.0f);
+        trailPos.x -= (getScale().x / 2.0 + mTrail->getScale().x / 3.0) * std::sin(3.14f * getAngle() / 180.0f);
+        trailPos.y += (getScale().y / 2.0 + mTrail->getScale().y / 3.0) * std::cos(3.14f * getAngle() / 180.0f);
         mTrail->setPosition(trailPos);
     }
 }

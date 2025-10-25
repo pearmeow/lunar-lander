@@ -33,7 +33,7 @@ AppStatus gAppStatus = RUNNING;
 Rocket* gRocket = nullptr;
 Entity* gTrail;
 Vector2 gRocketScale = {50.0f, 50.0f};
-Vector2 gTrailScale = {50.0f, 100.0f};
+Vector2 gTrailScale = {50.0f, 50.0f};
 Vector2 gBlockScale = {100.0f, 100.0f};
 Block* gBlocks = nullptr;
 
@@ -152,10 +152,10 @@ void update() {
 void render() {
     BeginDrawing();
     gRocket->render();
-    gTrail->render();
     for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].render();
     }
+    gTrail->render();
     DrawText(gGameOverMessage, ORIGIN.x, 0.0f, 60, WHITE);
     DrawText(gFuel, 10.0f, 10.0f, 30, WHITE);
     ClearBackground(BLACK);
