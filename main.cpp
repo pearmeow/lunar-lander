@@ -23,6 +23,7 @@ constexpr float FIXED_TIMESTEP = 1.0f / 60.0f;
 constexpr Vector2 ORIGIN = {SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0};
 
 constexpr char ROCKET_FP[] = "./assets/rocket.png";
+constexpr char TRAIL_FP[] = "./assets/fire.png";
 constexpr char BLOCK_FP[] = "./assets/block.png";
 constexpr char GREEN_BLOCK_FP[] = "./assets/greenBlock.png";
 constexpr int NUM_BLOCKS = 6;
@@ -30,7 +31,9 @@ constexpr int NUM_BLOCKS = 6;
 // Global Variables
 AppStatus gAppStatus = RUNNING;
 Rocket* gRocket = nullptr;
+Entity* gTrail;
 Vector2 gRocketScale = {50.0f, 50.0f};
+Vector2 gTrailScale = {50.0f, 100.0f};
 Vector2 gBlockScale = {100.0f, 100.0f};
 Block* gBlocks = nullptr;
 
@@ -53,6 +56,10 @@ void shutdown();
 void initialise() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lunar Lander");
     gRocket = new Rocket(ORIGIN, gRocketScale, ROCKET_FP);
+    gTrail = new Entity(ORIGIN, gTrailScale, TRAIL_FP, ATLAS, {1, 14},
+                        {{RIGHT, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}}});
+    gTrail->deactivate();
+    gRocket->setTrail(gTrail);
     gBlocks = new Block[NUM_BLOCKS];
     for (size_t i = 0; i < NUM_BLOCKS - 1; ++i) {
         gBlocks[i].setTexture(BLOCK_FP);
@@ -111,6 +118,7 @@ void update() {
         deltaTime -= FIXED_TIMESTEP;
 
         gRocket->update(FIXED_TIMESTEP, gBlocks, NUM_BLOCKS);
+        gTrail->update(FIXED_TIMESTEP, nullptr, 0);
         // if the rocket reaches a lose condition
         // (crashes due to high velocity & wrong rotation or lands on a lose block or is out of bounds)
         if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
@@ -144,6 +152,7 @@ void update() {
 void render() {
     BeginDrawing();
     gRocket->render();
+    gTrail->render();
     for (size_t i = 0; i < NUM_BLOCKS; ++i) {
         gBlocks[i].render();
     }

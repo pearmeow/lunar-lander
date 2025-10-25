@@ -226,7 +226,9 @@ void Entity::update(float deltaTime, Entity* collidableEntities, int collisionCh
     mPosition.x += mVelocity.x * deltaTime;
     checkCollisionX(collidableEntities, collisionCheckCount);
 
-    if (mTextureType == ATLAS && GetLength(mMovement) != 0 && mIsCollidingBottom) animate(deltaTime);
+    // no need to check movement because the only thing that's
+    // animating is a trail
+    if (mTextureType == ATLAS) animate(deltaTime);
 }
 
 void Entity::render() {

@@ -72,7 +72,7 @@ Rectangle getUVRectangle(const Texture2D* texture, int index, int rows, int cols
     float uCoord = (float)(index % cols) / (float)cols;
     uCoord *= texture->width;
 
-    float vCoord = (float)(index / (float)cols) / (float)rows;
+    float vCoord = (float)(index / cols) / (float)rows;
     vCoord *= texture->height;
 
     float sliceWidth = texture->width / (float)cols;
