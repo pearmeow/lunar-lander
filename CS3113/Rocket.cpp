@@ -35,9 +35,9 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
         if (Entity::isColliding(collidableBlocks + i)) {
             if (collidableBlocks[i].getType() == LOSE) {
                 mCrashed = true;
-            } else if (((getAngle() <= 5.0f && getAngle() >= 0.0f) ||
-                        (getAngle() >= 355.0f && getAngle() <= 360.0f)) &&
-                       getVelocity().y < 10.0f && getVelocity().x < 10.0f) {
+            } else if (((getAngle() <= 15.0f && getAngle() >= 0.0f) ||
+                        (getAngle() >= 345.0f && getAngle() <= 360.0f)) &&
+                       getVelocity().y < 30.0f && getVelocity().x < 30.0f) {
                 mLanded = true;
             } else {
                 mCrashed = true;
