@@ -1,41 +1,74 @@
-# Source and target
-SRCS = main.cpp CS3113/*.cpp
-TARGET = raylib_app
-
-# OS detection (macOS = Darwin, Windows via MinGW = MINGW*)
+# ------------------------------------------------------------
+#  Detect the operating system once, early in the file
+# ------------------------------------------------------------
 UNAME_S := $(shell uname -s)
 
-# Default values
-CXX = g++
-CXXFLAGS = -std=c++17
+# ------------------------------------------------------------
+#  Source files
+# ------------------------------------------------------------
+SRCS = main.cpp CS3113/*.cpp  # entities
 
-ifeq ($(UNAME_S), Darwin)
-    # macOS configuration
-    CXXFLAGS += -arch arm64
-    LIBS = -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+# ------------------------------------------------------------
+#  Target name
+# ------------------------------------------------------------
+TARGET = raylib_app
+
+# ------------------------------------------------------------
+#  Compiler / basic flags
+# ------------------------------------------------------------
+CXX      = g++
+CXXFLAGS = -std=c++11
+
+# ------------------------------------------------------------
+#  Raylib configuration (pkg‑config works on macOS too)
+# ------------------------------------------------------------
+RAYLIB_CFLAGS = $(shell pkg-config --cflags raylib)
+RAYLIB_LIBS   = $(shell pkg-config --libs   raylib)
+
+# ------------------------------------------------------------
+#  Platform‑specific settings
+# ------------------------------------------------------------
+# ---------- macOS ----------
+ifeq ($(UNAME_S),Darwin)
+    # Add the architecture flag you need (arm64 or x86_64)
+    CXXFLAGS += -arch arm64 $(RAYLIB_CFLAGS)
+
+    # Use the frameworks that ship with macOS
+    LIBS = $(RAYLIB_LIBS) \
+           -framework OpenGL \
+           -framework Cocoa \
+           -framework IOKit \
+           -framework CoreVideo
+
     EXEC = ./$(TARGET)
-else ifneq (,$(findstring MINGW,$(UNAME_S)))
-    # Windows configuration (assumes raylib in C:/raylib)
+
+# ----- Windows ----------
+else ifneq (,$(findstring MINGW,$(UNAME_S)))   
     CXXFLAGS += -IC:/raylib/include
     LIBS = -LC:/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
     TARGET := $(TARGET).exe
-    EXEC = $(TARGET)
-else
-    # Linux/WSL fallback
-    CXXFLAGS +=
-    LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+    EXEC = ./$(TARGET)
+
+# --------- Linux ----------
+else                                         
+    CXXFLAGS += $(RAYLIB_CFLAGS)
+    LIBS = $(RAYLIB_LIBS) -lGL -lm -lpthread -ldl -lrt -lX11
     EXEC = ./$(TARGET)
 endif
 
-# Build rule
+# ------------------------------------------------------------
+#  Build rule
+# ------------------------------------------------------------
 $(TARGET): $(SRCS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS) $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $(SRCS) $(LIBS)
 
-# Clean rule
+# ------------------------------------------------------------
+#  Convenience targets
+# ------------------------------------------------------------
+.PHONY: clean run
+
 clean:
-	@if [ -f "$(TARGET)" ]; then rm -f $(TARGET); fi
-	@if [ -f "$(TARGET).exe" ]; then rm -f $(TARGET).exe; fi
+	@rm -f $(TARGET) $(TARGET).exe
 
-# Run rule
 run: $(TARGET)
 	$(EXEC)
