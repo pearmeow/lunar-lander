@@ -19,7 +19,7 @@
 
 // Global Constants
 constexpr int SCREEN_WIDTH = 1600, SCREEN_HEIGHT = 900, FPS = 60, SIDES = 4;
-
+constexpr float FIXED_TIMESTEP = 1.0f / 60.0f;
 constexpr Vector2 ORIGIN = {SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0};
 
 constexpr char ROCKET_FP[] = "./assets/rocket.png";
@@ -31,9 +31,11 @@ constexpr int NUM_BLOCKS = 6;
 AppStatus gAppStatus = RUNNING;
 Rocket* gRocket = nullptr;
 Vector2 gRocketScale = {50.0f, 50.0f};
-float gPreviousTicks = 0.0f;
 Vector2 gBlockScale = {100.0f, 100.0f};
 Block* gBlocks = nullptr;
+
+float gPreviousTicks = 0.0f;
+float gTimeAccumulator = 0.0f;
 
 // allocate enough space to put win/lose messages in later
 bool gIsGameOver = false;
@@ -89,42 +91,53 @@ void processInput() {
 }
 
 void update() {
-    float ticks = (float)GetTime();
-    float deltaTime = ticks - gPreviousTicks;
-    gPreviousTicks = ticks;
-
     // skip updating if game is over
     if (gIsGameOver) {
         return;
     }
 
-    gRocket->update(deltaTime, gBlocks, NUM_BLOCKS);
-    // if the rocket reaches a lose condition
-    // (crashes due to high velocity & wrong rotation or lands on a lose block or is out of bounds)
-    if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
-        // some safe string copying
-        gIsGameOver = true;
-        strncpy(gGameOverMessage, "Mission Failed", 20);
-    } else if (gRocket->isLanded()) {
-        // if the rocket reaches a win condition
-        // some more safe string copying
-        gIsGameOver = true;
-        strncpy(gGameOverMessage, "Mission Accomplished", 20);
+    float ticks = (float)GetTime();
+    float deltaTime = ticks - gPreviousTicks;
+    gPreviousTicks = ticks;
+
+    deltaTime += gTimeAccumulator;
+
+    if (deltaTime < FIXED_TIMESTEP) {
+        gTimeAccumulator = deltaTime;
+        return;
     }
 
-    for (size_t i = 0; i < NUM_BLOCKS; ++i) {
-        gBlocks[i].update(deltaTime, nullptr, 0);
-        // printf("Block %lu pos: %f, %f\n", i, gBlocks[i].getPosition().x, gBlocks[i].getPosition().x);
-        // printf("Block %lu scale: %f, %f\n", i, gBlocks[i].getScale().x, gBlocks[i].getScale().x);
-        // printf("Block %lu collider: %f, %f\n", i, gBlocks[i].getColliderDimensions().x,
-        //        gBlocks[i].getColliderDimensions().x);
-    }
-    // convert float to char*
-    if (gRocket->getFuel() > 0.0f) {
-        std::to_chars(gFuel + 6, gFuel + 20, gRocket->getFuel());
-    } else {
-        // PERF: probably inefficient
-        strncpy(gFuel, "Fuel: 0.0", 20);
+    while (deltaTime >= FIXED_TIMESTEP) {
+        deltaTime -= FIXED_TIMESTEP;
+
+        gRocket->update(FIXED_TIMESTEP, gBlocks, NUM_BLOCKS);
+        // if the rocket reaches a lose condition
+        // (crashes due to high velocity & wrong rotation or lands on a lose block or is out of bounds)
+        if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
+            // some safe string copying
+            gIsGameOver = true;
+            strncpy(gGameOverMessage, "Mission Failed", 20);
+        } else if (gRocket->isLanded()) {
+            // if the rocket reaches a win condition
+            // some more safe string copying
+            gIsGameOver = true;
+            strncpy(gGameOverMessage, "Mission Accomplished", 20);
+        }
+
+        for (size_t i = 0; i < NUM_BLOCKS; ++i) {
+            gBlocks[i].update(FIXED_TIMESTEP, nullptr, 0);
+            // printf("Block %lu pos: %f, %f\n", i, gBlocks[i].getPosition().x, gBlocks[i].getPosition().x);
+            // printf("Block %lu scale: %f, %f\n", i, gBlocks[i].getScale().x, gBlocks[i].getScale().x);
+            // printf("Block %lu collider: %f, %f\n", i, gBlocks[i].getColliderDimensions().x,
+            //        gBlocks[i].getColliderDimensions().x);
+        }
+        // convert float to char*
+        if (gRocket->getFuel() > 0.0f) {
+            std::to_chars(gFuel + 6, gFuel + 20, gRocket->getFuel());
+        } else {
+            // PERF: probably inefficient
+            strncpy(gFuel, "Fuel: 0.0", 20);
+        }
     }
 }
 
