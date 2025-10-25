@@ -105,7 +105,7 @@ void Entity::checkCollisionX(Entity* collidableEntities, int collisionCheckCount
         Entity* collidableEntity = collidableEntities + i;
 
         if (isColliding(collidableEntity)) {
-            printf("In checkCollisionX on entity num %i\n", i);
+            // printf("In checkCollisionX on entity num %i\n", i);
             // When standing on a platform, we're always slightly overlapping
             // it vertically due to gravity, which causes false horizontal
             // collision detections. So the solution I dound is only resolve X
@@ -155,12 +155,12 @@ bool Entity::isColliding(Entity* other) const {
     float yDistance = fabs(mPosition.y - other->getPosition().y) -
                       ((mColliderDimensions.y + other->getColliderDimensions().y) / 2.0f);
     if (xDistance < 0.0f && yDistance < 0.0f) {
-        printf("this entity's position: %f %f\nthe other one's position: %f %f\n", mPosition.x, mPosition.y,
-               other->getPosition().x, other->getPosition().y);
-        printf("this entity's scale: %f %f\nthe other one's scale: %f %f\n", mScale.x, mScale.y,
-               other->getScale().x, other->getScale().y);
-        printf("this entity's colliders: %f %f\nthe other one's colliders: %f %f\n", mColliderDimensions.x,
-               mColliderDimensions.y, other->getColliderDimensions().x, other->getColliderDimensions().y);
+        // printf("this entity's position: %f %f\nthe other one's position: %f %f\n", mPosition.x, mPosition.y,
+        //        other->getPosition().x, other->getPosition().y);
+        // printf("this entity's scale: %f %f\nthe other one's scale: %f %f\n", mScale.x, mScale.y,
+        //        other->getScale().x, other->getScale().y);
+        // printf("this entity's colliders: %f %f\nthe other one's colliders: %f %f\n", mColliderDimensions.x,
+        //        mColliderDimensions.y, other->getColliderDimensions().x, other->getColliderDimensions().y);
         return true;
     }
 

@@ -100,6 +100,7 @@ void update() {
 
     gRocket->update(deltaTime, gBlocks, NUM_BLOCKS);
     // if the rocket reaches a lose condition
+    // (crashes due to high velocity & wrong rotation or lands on a lose block or is out of bounds)
     if (gRocket->isCrashed() || gRocket->isOutOfBounds(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         // some safe string copying
         gIsGameOver = true;

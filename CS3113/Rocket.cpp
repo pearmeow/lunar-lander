@@ -44,8 +44,10 @@ void Rocket::update(float deltaTime, Block* collidableBlocks, int numEntities) {
             }
         }
     }
-    printf("current pos: %f, %f\n", getPosition().x, getPosition().y);
-    Entity::update(deltaTime, collidableBlocks, numEntities);
+    // printf("current pos: %f, %f\n", getPosition().x, getPosition().y);
+    // fixes weird collision bug and also we don't need to
+    // check collision twice
+    Entity::update(deltaTime, nullptr, 0);
 }
 
 void Rocket::turnLeft() {
